@@ -1,0 +1,22 @@
+* {
+    font-family: 'Monaco', monospace;
+}
+
+body {
+    padding: 20px;
+}
+
+canvas {
+    border: 1px solid #ccc;
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px;
+    margin: 10px 0;
+    cursor: pointer;
+}
+
+.instructions {
+    margin: 20px 0;
+}

@@ -1,26 +1,19 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <title>Simple Express API with P5.js</title>
-    <ul>
-        <li>🖌 Change colors: press any key + click on the dot </li>
-        <li>🔥 Remove a dot: click on the dot </li>
-    </ul>
-    <style type="text/css">
-    * {
-        font-family: 'Monaco'
-    }
-    </style>
+    <title>Simple Express API</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Simple CRUD API with Express</h1>
-    <!-- p5 libraries -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/p5.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/addons/p5.dom.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/addons/p5.sound.min.js"></script>
-    <!-- your p5 sketch -->
-    <script type="text/javascript" src="sketch.js"></script>
+    <div class="instructions">
+        <ul>
+            <li>🖌 Change colors: press any key + click on the dot</li>
+            <li>🔥 Remove a dot: click on the dot</li>
+        </ul>
+    </div>
+    <button id="addCircle">Add new circle</button>
+    <canvas id="canvas" width="400" height="400"></canvas>
+    <script src="sketch.js"></script>
 </body>
-
 </html>
