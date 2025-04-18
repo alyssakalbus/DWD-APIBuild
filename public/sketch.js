@@ -1,104 +1,124 @@
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-const addButton = document.getElementById('addCircle');
-
-let myData = [];
+let myData;
 let myDots = [];
-const colors = ["AliceBlue", "AntiqueWhite", "Aqua", "Aquamarine", "Azure", "Beige", "Bisque", "Black", "BlanchedAlmond", "Blue", "BlueViolet", "Brown", "BurlyWood", "CadetBlue", "Chartreuse", "Chocolate", "Coral", "CornflowerBlue", "Cornsilk", "Crimson", "Cyan", "DarkBlue", "DarkCyan", "DarkGoldenRod", "DarkGray", "DarkGrey", "DarkGreen", "DarkKhaki", "DarkMagenta", "DarkOliveGreen", "DarkOrange", "DarkOrchid", "DarkRed", "DarkSalmon", "DarkSeaGreen", "DarkSlateBlue", "DarkSlateGray", "DarkSlateGrey", "DarkTurquoise", "DarkViolet", "DeepPink", "DeepSkyBlue", "DimGray", "DimGrey", "DodgerBlue", "FireBrick", "FloralWhite", "ForestGreen", "Fuchsia", "Gainsboro", "GhostWhite", "Gold", "GoldenRod", "Gray", "Grey", "Green", "GreenYellow", "HoneyDew", "HotPink", "IndianRed", "Indigo", "Ivory", "Khaki", "Lavender", "LavenderBlush", "LawnGreen", "LemonChiffon", "LightBlue", "LightCoral", "LightCyan", "LightGoldenRodYellow", "LightGray", "LightGrey", "LightGreen", "LightPink", "LightSalmon", "LightSeaGreen", "LightSkyBlue", "LightSlateGray", "LightSlateGrey", "LightSteelBlue", "LightYellow", "Lime", "LimeGreen", "Linen", "Magenta", "Maroon", "MediumAquaMarine", "MediumBlue", "MediumOrchid", "MediumPurple", "MediumSeaGreen", "MediumSlateBlue", "MediumSpringGreen", "MediumTurquoise", "MediumVioletRed", "MidnightBlue", "MintCream", "MistyRose", "Moccasin", "NavajoWhite", "Navy", "OldLace", "Olive", "OliveDrab", "Orange", "OrangeRed", "Orchid", "PaleGoldenRod", "PaleGreen", "PaleTurquoise", "PaleVioletRed", "PapayaWhip", "PeachPuff", "Peru", "Pink", "Plum", "PowderBlue", "Purple", "RebeccaPurple", "Red", "RosyBrown", "RoyalBlue", "SaddleBrown", "Salmon", "SandyBrown", "SeaGreen", "SeaShell", "Sienna", "Silver", "SkyBlue", "SlateBlue", "SlateGray", "SlateGrey", "Snow", "SpringGreen", "SteelBlue", "Tan", "Teal", "Thistle", "Tomato", "Turquoise", "Violet", "Wheat", "White", "WhiteSmoke", "Yellow", "YellowGreen"];
+const colors = ["AliceBlue", "AntiqueWhite", "Aqua", "Aquamarine", "Azure", "Beige", "Bisque", "Black", "BlanchedAlmond", "Blue", "BlueViolet", "Brown", "BurlyWood", "CadetBlue", "Chartreuse", "Chocolate", "Coral", "CornflowerBlue", "Cornsilk", "Crimson", "Cyan", "DarkBlue", "DarkCyan", "DarkGoldenRod", "DarkGray", "DarkGrey", "DarkGreen", "DarkKhaki", "DarkMagenta", "DarkOliveGreen", "DarkOrange", "DarkOrchid", "DarkRed", "DarkSalmon", "DarkSeaGreen", "DarkSlateBlue", "DarkSlateGray", "DarkSlateGrey", "DarkTurquoise", "DarkViolet", "DeepPink", "DeepSkyBlue", "DimGray", "DimGrey", "DodgerBlue", "FireBrick", "FloralWhite", "ForestGreen", "Fuchsia", "Gainsboro", "GhostWhite", "Gold", "GoldenRod", "Gray", "Grey", "Green", "GreenYellow", "HoneyDew", "HotPink", "IndianRed", "Indigo", "Ivory", "Khaki", "Lavender", "LavenderBlush", "LawnGreen", "LemonChiffon", "LightBlue", "LightCoral", "LightCyan", "LightGoldenRodYellow", "LightGray", "LightGrey", "LightGreen", "LightPink", "LightSalmon", "LightSeaGreen", "LightSkyBlue", "LightSlateGray", "LightSlateGrey", "LightSteelBlue", "LightYellow", "Lime", "LimeGreen", "Linen", "Magenta", "Maroon", "MediumAquaMarine", "MediumBlue", "MediumOrchid", "MediumPurple", "MediumSeaGreen", "MediumSlateBlue", "MediumSpringGreen", "MediumTurquoise", "MediumVioletRed", "MidnightBlue", "MintCream", "MistyRose", "Moccasin", "NavajoWhite", "Navy", "OldLace", "Olive", "OliveDrab", "Orange", "OrangeRed", "Orchid", "PaleGoldenRod", "PaleGreen", "PaleTurquoise", "PaleVioletRed", "PapayaWhip", "PeachPuff", "Peru", "Pink", "Plum", "PowderBlue", "Purple", "RebeccaPurple", "Red", "RosyBrown", "RoyalBlue", "SaddleBrown", "Salmon", "SandyBrown", "SeaGreen", "SeaShell", "Sienna", "Silver", "SkyBlue", "SlateBlue", "SlateGray", "SlateGrey", "Snow", "SpringGreen", "SteelBlue", "Tan", "Teal", "Thistle", "Tomato", "Turquoise", "Violet", "Wheat", "White", "WhiteSmoke", "Yellow", "YellowGreen"]
+let postButton;
 
-// Fetch initial data
-async function loadData() {
-    const response = await fetch('/api');
-    myData = await response.json();
-    updateMyDots();
+function preload() {
+    myData = loadJSON("/api");
+}
+
+function setup() {
+    createCanvas(400, 400);
+
+    // Initialize the view with myDots
+    // NOTICE: the x, y values are now strings rather than integers
+    console.log(myData);
+    for (p in myData) {
+        const item = myData[p];
+        const x = int(item.x);
+        const y = int(item.y);
+        myDots.push(new Dot(item.x, item.y, item.color, item._id))
+    }
+
+    postButton = createButton("add new circle")
+    postButton.mousePressed(handlePost);
+
+}
+
+function handlePost(e) {
+    console.log('adding new circle!')
+    let colorSelection = colors[floor(random(colors.length))]
+    let newCircle = {
+        "color": colorSelection,
+        "x": floor(random(width)),
+        "y": floor(random(height))
+    }
+    httpPost("/api", newCircle, (result) => {
+        // the result logs the object you submited
+        console.log(result)
+        // get the latest data and update myData
+        updateMyDots()
+    })
 }
 
 function updateMyDots() {
+    // clear myDots
     myDots = [];
-    for (let item of myData) {
-        myDots.push(new Dot(item.x, item.y, item.color, item._id));
-    }
-    draw();
+    loadJSON("/api", (result) => {
+        myData = result;
+        for (p in myData) {
+            const item = myData[p];
+            const x = int(item.x);
+            const y = int(item.y);
+            myDots.push(new Dot(item.x, item.y, item.color, item._id))
+        }
+    });
 }
 
 function draw() {
-    ctx.fillStyle = '#c8c8c8';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    background(200);
 
-    myDots.forEach(dot => dot.display());
+    myDots.forEach(item => {
+        item.display()
+    })
+}
+
+function mousePressed() {
+    myDots.forEach(item => {
+        item.intersects()
+    })
 }
 
 class Dot {
-    constructor(x, y, color, id) {
-        this.x = parseInt(x);
-        this.y = parseInt(y);
-        this.id = id;
-        this.color = color;
+    constructor(_x, _y, _color, _id) {
+        this.x = _x;
+        this.y = _y;
+        this.id = _id;
+        this.color = _color;
+        this.remove = this.remove.bind(this);
+        this.updateColor = this.updateColor.bind(this);
     }
 
-    async remove() {
-        const response = await fetch(`/api/${this.id}`, {
-            method: 'DELETE'
-        });
-        await loadData();
+    intersects() {
+        let d = dist(mouseX, mouseY, this.x, this.y);
+        if (d < 20) {
+            if (keyIsPressed) {
+                this.updateColor();
+            } else {
+                this.remove();
+            }
+        }
     }
 
-    async updateColor() {
-        const colorSelection = colors[Math.floor(Math.random() * colors.length)];
-        const response = await fetch(`/api/${this.id}`, {
+    updateColor() {
+        let colorSelection = colors[floor(random(colors.length))]
+        const options = {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
+                // "Content-Type": "application/x-www-form-urlencoded",
             },
-            body: JSON.stringify({ color: colorSelection })
-        });
-        await loadData();
+            body: JSON.stringify({
+                "color": colorSelection
+            })
+        }
+        fetch(`/api/${this.id}`, options).then(result => {
+            updateMyDots()
+        })
+    }
+
+    remove() {
+        // see issue with readable stream: https://stackoverflow.com/questions/40385133/retrieve-data-from-a-readablestream-object
+        console.log('removing!', this.id)
+        fetch(`/api/${this.id}`, {
+            method: 'DELETE'
+        }).then(result => {
+            updateMyDots()
+        })
     }
 
     display() {
-        ctx.beginPath();
-        ctx.fillStyle = this.color;
-        ctx.arc(this.x, this.y, 20, 0, Math.PI * 2);
-        ctx.fill();
+        fill(this.color);
+        ellipse(this.x, this.y, 40, 40)
     }
 }
-
-async function handlePost() {
-    const colorSelection = colors[Math.floor(Math.random() * colors.length)];
-    const newCircle = {
-        color: colorSelection,
-        x: Math.floor(Math.random() * canvas.width),
-        y: Math.floor(Math.random() * canvas.height)
-    };
-
-    const response = await fetch('/api', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newCircle)
-    });
-    await loadData();
-}
-
-canvas.addEventListener('click', (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-
-    myDots.forEach(dot => {
-        const d = Math.hypot(mouseX - dot.x, mouseY - dot.y);
-        if (d < 20) {
-            if (e.shiftKey) {
-                dot.updateColor();
-            } else {
-                dot.remove();
-            }
-        }
-    });
-});
-
-addButton.addEventListener('click', handlePost);
-
-// Initial load
-loadData();
